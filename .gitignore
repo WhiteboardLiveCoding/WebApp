@@ -1,3 +1,8 @@
+# testing
+/coverage
+
+# production
+/build
 
 # Created by https://www.gitignore.io/api/vim,node,macos,windows,webstorm+all
 
