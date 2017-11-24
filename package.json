@@ -5,6 +5,7 @@
   "dependencies": {
     "@blueprintjs/core": "^1.33.0",
     "@blueprintjs/labs": "^0.13.0",
+    "annyang": "^2.6.0",
     "axios": "^0.17.1",
     "history": "^4.7.2",
     "react": "^16.1.1",
@@ -23,6 +24,7 @@
     "eject": "react-scripts-ts eject"
   },
   "devDependencies": {
+    "@types/annyang": "^2.6.1",
     "@types/enzyme": "^3.1.4",
     "@types/history": "^4.6.2",
     "@types/jest": "^21.1.6",
