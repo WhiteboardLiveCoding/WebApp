@@ -5,6 +5,8 @@ import 'codemirror/mode/python/python';
 import 'codemirror/theme/monokai.css';
 import { History } from 'history';
 import axios, { AxiosResponse, AxiosError } from 'axios';
+import * as annyang from 'annyang';
+import { Annyang, CommandOption } from 'annyang';
 
 import { CMDiv, MonokaiDiv, CodeImage } from './styled';
 import Navbar from '../../components/Navbar/code';
@@ -36,6 +38,7 @@ class Code extends React.Component<CodeContainerProps, CodeContainerState> {
     key: '',
     editor: ''
   };
+  private jeff: Annyang;
 
   constructor(props: CodeContainerProps) {
     super(props);
@@ -49,7 +52,28 @@ class Code extends React.Component<CodeContainerProps, CodeContainerState> {
       code: props.history.location.state.fixed
     };
 
+    this.jeff = annyang as Annyang;
     this.onResubmit = this.onResubmit.bind(this);
+  }
+
+  public componentWillMount() {
+    if (this.jeff) {
+      const commands: CommandOption = {
+        'whiteboard run': {
+          'regexp': /.*whiteboard run.*/,
+          'callback': this.onResubmit
+        }
+      };
+
+      this.jeff.addCommands(commands);
+
+      this.jeff.debug();
+      this.jeff.start({autoRestart: true, continuous: false});
+    }
+  }
+
+  public componentWillUnmount() {
+    this.jeff.pause();
   }
 
   public render() {

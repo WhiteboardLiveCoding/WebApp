@@ -2,6 +2,8 @@ import * as React from 'react';
 import { Button, Intent } from '@blueprintjs/core';
 import { History } from 'history';
 import axios, { AxiosResponse, AxiosError } from 'axios';
+import * as annyang from 'annyang';
+import { Annyang, CommandOption } from 'annyang';
 
 import Navbar from '../../components/Navbar/home';
 import Camera from '../../components/Camera';
@@ -18,6 +20,7 @@ export interface HomeContainerState {
 }
 
 class Home extends React.Component<HomeContainerProps, HomeContainerState> {
+  private jeff: Annyang;
   private camera: Camera;
   private canvas: HTMLCanvasElement;
   private blankCanvas: HTMLCanvasElement;
@@ -29,12 +32,37 @@ class Home extends React.Component<HomeContainerProps, HomeContainerState> {
       selectedFile: undefined
     };
 
+    this.jeff = annyang as Annyang;
     this.onCapture = this.onCapture.bind(this);
     this.onFileUpload = this.onFileUpload.bind(this);
     this.onCanvasUpload = this.onCanvasUpload.bind(this);
     this.onCanvasRef = this.onCanvasRef.bind(this);
     this.onBlankCanvasRef = this.onBlankCanvasRef.bind(this);
     this.onFileSelect = this.onFileSelect.bind(this);
+  }
+
+  public componentWillMount() {
+    if (this.jeff) {
+      const commands: CommandOption = {
+        'whiteboard capture': {
+          'regexp': /.*whiteboard capture.*/,
+          'callback': this.onCapture
+        },
+        'whiteboard upload': {
+          'regexp': /.*whiteboard upload.*/,
+          'callback': this.onCanvasUpload
+        }
+      };
+
+      this.jeff.addCommands(commands);
+
+      this.jeff.debug();
+      this.jeff.start({autoRestart: true, continuous: false});
+    }
+  }
+
+  public componentWillUnmount() {
+    this.jeff.pause();
   }
 
   public render() {
