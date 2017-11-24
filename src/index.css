@@ -1,3 +1,6 @@
+@import "~@blueprintjs/core/dist/blueprint.css";
+@import "~codemirror/lib/codemirror.css";
+
 body {
   margin: 0;
   padding: 0;
